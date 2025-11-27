@@ -1,0 +1,53 @@
+/* src/App.module.css */
+.container {
+  max-width: 500px; /* 모바일 너비 */
+  margin: 40px auto;
+  background-color: #ffffff;
+  min-height: 90vh;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 모바일 화면에서는 꽉 차게 */
+@media (max-width: 600px) {
+  .container {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+}
+
+.recommendButton {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(
+    135deg,
+    #fee500 0%,
+    #ffd000 100%
+  ); /* 카카오 느낌 그라데이션 */
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(254, 229, 0, 0.4);
+  margin-bottom: 20px;
+}
+
+.recommendButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 229, 0, 0.6);
+}
+
+.recommendButton:disabled {
+  background: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

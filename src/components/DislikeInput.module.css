@@ -1,0 +1,49 @@
+/* src/components/DislikeInput.module.css */
+.wrapper {
+  margin-bottom: 25px;
+}
+
+.input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  font-size: 15px;
+  transition: border-color 0.3s;
+  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+  outline: none;
+}
+
+.input:focus {
+  border-color: #fee500;
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tag {
+  background-color: #fff0f0;
+  color: #ff4d4d;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ffcccc;
+}
+
+.tag:hover {
+  background-color: #ffcccc;
+}
+
+.closeIcon {
+  margin-left: 6px;
+  font-size: 12px;
+}

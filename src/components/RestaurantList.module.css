@@ -1,0 +1,79 @@
+/* src/components/RestaurantList.module.css */
+.listContainer {
+  margin-top: 30px;
+}
+
+.title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 700;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* 살짝 위로 올라감 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  border-color: #fee500;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.placeName {
+  font-size: 17px;
+  font-weight: 700;
+  color: #222;
+}
+
+.distance {
+  font-size: 12px;
+  color: #ff5a5a;
+  background-color: #fff0f0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.address {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 15px;
+}
+
+.linkButton {
+  display: block;
+  text-align: center;
+  background-color: #f8f9fa;
+  color: #495057;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.linkButton:hover {
+  background-color: #e9ecef;
+}
