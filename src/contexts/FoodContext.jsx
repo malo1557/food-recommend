@@ -25,10 +25,16 @@ export function FoodProvider({ children }) {
             lng: position.coords.longitude,
           });
           setLocationStatus("내 위치를 찾았어요! 📍");
+          console.log(myLoc);
+          if (myLoc === null) {
+            setLocationStatus("gps 탐지 실패 기본위치 사용");
+            setMyLoc({ lat: 35.164821, lng: 128.098462 });
+          }
         },
         () => {
           setLocationStatus("위치 파악 실패 (기본 위치 사용)");
-          setMyLoc({ lat: 37.566826, lng: 126.9786567 });
+          setMyLoc({ lat: 35.164821, lng: 128.098462 });
+          //35.164821, 128.098462
         }
       );
     }
@@ -48,7 +54,7 @@ export function FoodProvider({ children }) {
     const ps = new window.kakao.maps.services.Places();
     const options = {
       location: new window.kakao.maps.LatLng(myLoc.lat, myLoc.lng),
-      radius: 1000,
+      radius: 3000,
       sort: window.kakao.maps.services.SortBy.DISTANCE,
     };
 
