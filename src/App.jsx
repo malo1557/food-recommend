@@ -13,7 +13,6 @@ const MainContent = () => {
   return (
     <div className={styles.container}>
       {" "}
-      {/* 스타일 적용 */}
       <Header />
       <DislikeInput />
       <button
@@ -23,7 +22,7 @@ const MainContent = () => {
       >
         {isLoading ? "AI가 생각 중... 🧠" : "메뉴 추천받기 🚀"}
       </button>
-      {/* 마크다운은 index.css에 전역으로 정의해서 className만 맞추면 됨 */}
+      {/* 마크다운*/}
       <div className="markdown-body" style={{ marginTop: "20px" }}>
         <ReactMarkdown>{result}</ReactMarkdown>
       </div>
