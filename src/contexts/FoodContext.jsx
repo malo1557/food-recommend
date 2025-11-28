@@ -16,27 +16,34 @@ export function FoodProvider({ children }) {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // --- 위치 가져오기 (useEffect) ---
+  // --- 위치 가져오기 (useEffect) ---
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          // 성공했을 때 받은 좌표
+          const realLat = position.coords.latitude;
+          const realLng = position.coords.longitude;
+
+          console.log("실제 GPS 좌표 수신 성공:", realLat, realLng);
+
+          // 그냥 바로 저장하면 끝! (if 문으로 확인할 필요 없음)
           setMyLoc({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: realLat,
+            lng: realLng,
           });
           setLocationStatus("내 위치를 찾았어요! 📍");
-          console.log(myLoc);
-          if (myLoc === null) {
-            setLocationStatus("gps 탐지 실패 기본위치 사용");
-            setMyLoc({ lat: 35.164821, lng: 128.098462 });
-          }
         },
-        () => {
+        (error) => {
+          // 진짜 에러가 났을 때만 여기로 옴
+          console.error("GPS 에러:", error);
           setLocationStatus("위치 파악 실패 (기본 위치 사용)");
           setMyLoc({ lat: 35.164821, lng: 128.098462 });
-          //35.164821, 128.098462
         }
       );
+    } else {
+      setLocationStatus("GPS를 지원하지 않는 브라우저입니다.");
+      setMyLoc({ lat: 35.164821, lng: 128.098462 });
     }
   }, []);
 
