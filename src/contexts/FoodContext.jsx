@@ -4,28 +4,29 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const FoodContext = createContext();
 
 export function FoodProvider({ children }) {
-  // --- 상태(State) 관리 ---
-  const [restaurants, setRestaurants] = useState([]); // 가게 리스트
-  const [myLoc, setMyLoc] = useState(null); // 내 위치
+  // --- 상태(State) 분리! ---
+  const [homeRestaurants, setHomeRestaurants] = useState([]); //  홈 화면용 데이터
+  const [recommendRestaurants, setRecommendRestaurants] = useState([]); //  AI 추천용 데이터
+
+  const [myLoc, setMyLoc] = useState(null);
   const [locationStatus, setLocationStatus] = useState("위치 파악 중...");
 
-  // AI 및 기타 상태
   const [aiResult, setAiResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [dislikes, setDislikes] = useState([]);
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
-  // 1. 내 위치 잡기 (진주 기본값 설정 포함)
+  // 1. 내 위치 잡기
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          // console.log("📍 GPS 수신 성공:", lat, lng);
-          setMyLoc({ lat, lng });
-          setLocationStatus("내 위치를 찾았어요! 📍");
+          setMyLoc({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+          setLocationStatus("내 위치를 찾았어요! ");
         },
         (err) => {
           console.error("GPS 실패:", err);
@@ -39,14 +40,8 @@ export function FoodProvider({ children }) {
     }
   }, []);
 
-  // 🆕 ✨ 데이터 초기화 함수 (청소기)
-  const resetData = () => {
-    setRestaurants([]);
-    setAiResult("");
-  };
-
-  // 2. 카카오 검색 함수
-  const searchPlaces = (keyword) => {
+  // 2. 카카오 검색 함수 (type 파라미터 추가!)
+  const searchPlaces = (keyword, type = "home") => {
     if (!myLoc || !window.kakao || !window.kakao.maps) return;
 
     const ps = new window.kakao.maps.services.Places();
@@ -59,10 +54,14 @@ export function FoodProvider({ children }) {
     ps.keywordSearch(
       keyword,
       (data, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          setRestaurants(data);
+        const result =
+          status === window.kakao.maps.services.Status.OK ? data : [];
+
+        // 🚩 type에 따라 다른 변수에 저장
+        if (type === "home") {
+          setHomeRestaurants(result);
         } else {
-          setRestaurants([]);
+          setRecommendRestaurants(result);
         }
       },
       options
@@ -74,7 +73,7 @@ export function FoodProvider({ children }) {
     if (!myLoc) return alert("위치 정보를 기다리고 있어요!");
     setIsLoading(true);
     setAiResult("Gemini가 고민 중... 🤔");
-    setRestaurants([]); // 검색 전 기존 리스트 비우기
+    setRecommendRestaurants([]); // AI 리스트만 비우기
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -88,8 +87,9 @@ export function FoodProvider({ children }) {
       setAiResult(text.split("@@@")[0]);
       const match = text.match(/@@@(.*?)@@@/);
 
-      if (match && match[1]) searchPlaces(match[1]);
-      else searchPlaces(text.slice(0, 5));
+      // 🚩 검색할 때 'recommend' 타입으로 요청!
+      if (match && match[1]) searchPlaces(match[1], "recommend");
+      else searchPlaces(text.slice(0, 5), "recommend");
     } catch (e) {
       console.error(e);
       setAiResult("에러가 발생했어요 ㅠㅠ");
@@ -98,7 +98,11 @@ export function FoodProvider({ children }) {
     }
   };
 
-  // 싫어하는 음식 관리
+  // 4. 데이터 초기화 (AI 쪽 텍스트만 지움, 데이터는 유지 가능)
+  const resetAiResult = () => {
+    setAiResult("");
+  };
+
   const addDislike = (food) => {
     if (food && !dislikes.includes(food)) setDislikes([...dislikes, food]);
   };
@@ -107,7 +111,8 @@ export function FoodProvider({ children }) {
   };
 
   const value = {
-    restaurants,
+    homeRestaurants,
+    recommendRestaurants,
     myLoc,
     locationStatus,
     aiResult,
@@ -117,7 +122,7 @@ export function FoodProvider({ children }) {
     recommendMenu,
     addDislike,
     removeDislike,
-    resetData, // 👈 Export 필수!
+    resetAiResult,
   };
 
   return <FoodContext.Provider value={value}>{children}</FoodContext.Provider>;

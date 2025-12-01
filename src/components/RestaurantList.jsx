@@ -1,8 +1,6 @@
 import React, { memo } from "react";
-// CSS 파일 경로가 components/css 안에 있다면 경로를 맞춰주세요!
 import styles from "./css/RestaurantList.module.css";
 
-// props로 'restaurants' 데이터를 받아옵니다.
 const RestaurantList = memo(({ restaurants }) => {
   // 데이터가 없거나 비어있을 때 처리
   if (!restaurants || restaurants.length === 0) {

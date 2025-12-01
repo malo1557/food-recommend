@@ -9,7 +9,7 @@ const Pagination = ({
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // 페이지가 1개뿐이면 버튼 안 보여줌 (깔끔하게)
+  // 페이지가 1개뿐이면 버튼 안 보여줌
   if (totalPages <= 1) return null;
 
   const pageNumbers = [];

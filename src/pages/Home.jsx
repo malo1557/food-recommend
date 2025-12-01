@@ -1,50 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { useFood } from "../contexts/FoodContext";
-import { useNavigate } from "react-router-dom";
 import styles from "./css/Home.module.css";
-
-// 컴포넌트들 불러오기
-import CategoryTabs from "../components/CategoryTabs"; // 카테고리 탭
-import Pagination from "../components/Pagination"; //  페이지  넘버링
-import RestaurantList from "../components/RestaurantList"; // 식당 리스트
+import CategoryTabs from "../components/CategoryTabs";
+import Pagination from "../components/Pagination";
+import RestaurantList from "../components/RestaurantList";
 
 const Home = () => {
-  const { restaurants, searchPlaces, myLoc, locationStatus } = useFood();
-  const navigate = useNavigate();
+  const { homeRestaurants, searchPlaces, myLoc, locationStatus } = useFood();
 
-  // --- 상태 관리 ---
   const [category, setCategory] = useState("한식");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
 
-  // --- 1. 데이터 로드 ---
+  //카테고리 변경시 페이지 1로 변경
   useEffect(() => {
     if (myLoc) {
-      searchPlaces(`${category} 맛집`);
+      // 🚩 'home' 타입 지정
+      searchPlaces(`${category} 맛집`, "home");
       setCurrentPage(1);
     }
   }, [category, myLoc]);
 
-  // --- 2. 현재 페이지 데이터 자르기 ---
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = restaurants.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = homeRestaurants.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className={styles.container}>
-      {/* 1. 카테고리 탭 */}
+      <header className={styles.header}>
+        <h1>🏠 우리 동네 맛집</h1>
+        <p className={styles.statusText}>{locationStatus}</p>
+      </header>
+
       <CategoryTabs
         categories={["한식", "중식", "일식", "양식"]}
         currentCategory={category}
         onSelect={setCategory}
       />
 
-      {/* 2. 리스트 출력 */}
+      <ul className={styles.list}></ul>
+      {/* (위 ul은 빈 태그라 사실 지워도 됨, 아래 컴포넌트가 핵심) */}
+
       <RestaurantList restaurants={currentItems} />
 
-      {/* 3. 페이지네이션 */}
       <Pagination
-        totalItems={restaurants.length}
+        totalItems={homeRestaurants.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
