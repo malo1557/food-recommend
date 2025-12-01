@@ -1,57 +1,77 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useFood } from "../contexts/FoodContext";
-import { useNavigate } from "react-router-dom";
-import DislikeInput from "../components/DislikeInput"; // 기존 컴포넌트 활용
+import DislikeInput from "../components/DislikeInput";
+import RestaurantList from "../components/RestaurantList";
 import ReactMarkdown from "react-markdown";
-import styles from "../App.module.css"; // 기존 버튼 스타일 등 활용
+import styles from "./css/Recommend.module.css";
+import Pagination from "../components/Pagination";
 
 const Recommend = () => {
-  const { aiResult, recommendMenu, isLoading, restaurants } = useFood();
-  const navigate = useNavigate();
+  // resetData 함수 가져오기
+  const { aiResult, recommendMenu, isLoading, restaurants, resetData } =
+    useFood();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  // 🆕 ✨ 1. 페이지 처음 들어오면 데이터 싹 비우기 (청소)
+  useEffect(() => {
+    resetData();
+  }, []);
+
+  // ✨ 2. 새로운 추천 결과가 나오면 1페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [restaurants]);
+
+  // --- 데이터 자르기 로직 ---
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = restaurants.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          background: "none",
-          border: "none",
-          fontSize: "24px",
-          cursor: "pointer",
-          marginBottom: "10px",
-        }}
-      >
-        🔙
-      </button>
-      <h1 style={{ textAlign: "center" }}>🤖 AI 메뉴 추천</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>🤖 AI 메뉴 추천</h1>
 
+      {/* 1. 싫어하는 음식 입력 */}
       <DislikeInput />
 
+      {/* 2. 추천 요청 버튼 */}
       <button
         onClick={recommendMenu}
         disabled={isLoading}
         className={styles.recommendButton}
       >
-        {isLoading ? "AI가 생각 중... 🧠" : "메뉴 추천받기 🚀"}
+        {isLoading ? "AI가 맛집을 찾는 중... 🧠" : "오늘의 메뉴 추천받기 🚀"}
       </button>
 
-      <div
-        className="markdown-body"
-        style={{
-          marginTop: "20px",
-          padding: "15px",
-          background: "#f9f9f9",
-          borderRadius: "10px",
-        }}
-      >
-        <ReactMarkdown>{aiResult}</ReactMarkdown>
+      {/* 3. AI 응답 결과 */}
+      <div className={styles.resultBox}>
+        {aiResult ? (
+          <div className="markdown-body">
+            <ReactMarkdown>{aiResult}</ReactMarkdown>
+          </div>
+        ) : (
+          <p style={{ textAlign: "center", color: "#aaa" }}>
+            버튼을 눌러 AI에게 추천을 받아보세요!
+          </p>
+        )}
       </div>
 
-      {/* 추천된 메뉴의 검색 결과(가게)가 있다면 여기도 보여줌 */}
+      {/* 4. 추천된 메뉴의 가게 리스트 & 페이징 */}
       {restaurants.length > 0 && (
-        <div style={{ marginTop: "20px", textAlign: "center", color: "#666" }}>
-          👇 추천 메뉴 파는 곳을 찾았어요! (홈에서 자세히 확인 가능)
-        </div>
+        <>
+          <h3 className={styles.listTitle}>👇 추천 메뉴 판매 식당</h3>
+
+          <RestaurantList restaurants={currentItems} />
+
+          <Pagination
+            totalItems={restaurants.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
     </div>
   );

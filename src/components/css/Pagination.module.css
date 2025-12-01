@@ -1,0 +1,28 @@
+/* src/components/Pagination.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #eee;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.button:hover:not(.active) {
+  background-color: #ddd;
+}

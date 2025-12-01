@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFood } from "../contexts/FoodContext";
-import styles from "./DislikeInput.module.css";
+import styles from "./css/DislikeInput.module.css";
 
 const DislikeInput = () => {
   const { dislikes, addDislike, removeDislike } = useFood();

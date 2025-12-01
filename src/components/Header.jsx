@@ -1,15 +1,39 @@
 import React, { memo } from "react";
+import { NavLink } from "react-router-dom"; // 👈 NavLink 임포트 필수!
 import { useFood } from "../contexts/FoodContext";
+import styles from "./css/Header.module.css";
 
 const Header = memo(() => {
-  const { locationStatus } = useFood(); // 필요한 것만 꺼내 씀
-
-  // console.log("Header 렌더링됨!");
+  const { locationStatus } = useFood();
 
   return (
-    <header style={{ textAlign: "center", marginBottom: "30px" }}>
-      <h1> 점심 메뉴 추천</h1>
-      <p style={{ color: "#666", fontSize: "14px" }}>{locationStatus}</p>
+    <header className={styles.header}>
+      {/* 1. 제목과 상태 */}
+      <h1 className={styles.title}>🍴 점심 메뉴 추천</h1>
+      <p className={styles.status}>{locationStatus}</p>
+
+      {/* 2. 네비게이션 메뉴 (탭) */}
+      <nav className={styles.nav}>
+        {/* 주변 식당 (홈) 버튼 */}
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `${styles.navLink} ${isActive ? styles.active : ""}`
+          }
+        >
+          🏠 주변 식당
+        </NavLink>
+
+        {/* AI 추천 버튼 */}
+        <NavLink
+          to="/recommend"
+          className={({ isActive }) =>
+            `${styles.navLink} ${isActive ? styles.active : ""}`
+          }
+        >
+          🤖 AI 추천
+        </NavLink>
+      </nav>
     </header>
   );
 });

@@ -1,0 +1,56 @@
+/* src/components/Header.module.css */
+
+/* 기존 스타일 유지... */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.status {
+  color: #666;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 20px; /* 네비게이션과 간격 띄우기 */
+}
+
+/* 👇 여기부터 네비게이션 스타일 추가 */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* 버튼 사이 간격 */
+  padding: 0 10px;
+}
+
+.navLink {
+  flex: 1; /* 너비 똑같이 나눠 갖기 */
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  color: #888;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 활성화(선택)되었을 때 스타일 */
+.active {
+  background-color: #333; /* 검은색 배경 */
+  color: white; /* 흰색 글씨 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navLink:hover:not(.active) {
+  background-color: #e0e0e0;
+}

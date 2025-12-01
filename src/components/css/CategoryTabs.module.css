@@ -1,0 +1,23 @@
+/* src/components/CategoryTabs.module.css */
+.container {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  background-color: #fff;
+  color: #aaa;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.active {
+  border-bottom: 3px solid #fee500;
+  color: #333;
+}
