@@ -1,7 +1,5 @@
-// src/components/DislikeInput.jsx
 import React, { useState } from "react";
 import { useFood } from "../contexts/FoodContext";
-// 👇 이 파일이 같은 폴더에 없으면 500 에러가 납니다!
 import styles from "./DislikeInput.module.css";
 
 const DislikeInput = () => {
