@@ -1,3 +1,5 @@
+.env 파일에 추가
+
 # Google Gemini API Key
 VITE_GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
 
