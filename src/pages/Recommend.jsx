@@ -34,9 +34,10 @@ const Recommend = () => {
 
   return (
     <div className={styles.container}>
-      <br />
-      <h1 className={styles.title}>🤖 AI 메뉴 추천</h1>
-      <p className={styles.statusText}>{locationStatus}</p>
+      <header className={styles.header}>
+        <h1 className={styles.title}>🤖 AI 메뉴 추천</h1>
+        <p className={styles.statusText}>{locationStatus}</p>
+      </header>
 
       <DislikeInput />
 
