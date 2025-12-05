@@ -4,9 +4,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const FoodContext = createContext();
 
 export function FoodProvider({ children }) {
-  // --- 상태(State) 분리! ---
-  const [homeRestaurants, setHomeRestaurants] = useState([]); //  홈 화면용 데이터
-  const [recommendRestaurants, setRecommendRestaurants] = useState([]); //  AI 추천용 데이터
+  // --- 상태(State) 관리 ---
+  const [homeRestaurants, setHomeRestaurants] = useState([]);
+  const [recommendRestaurants, setRecommendRestaurants] = useState([]);
 
   const [myLoc, setMyLoc] = useState(null);
   const [locationStatus, setLocationStatus] = useState("위치 파악 중...");
@@ -17,30 +17,65 @@ export function FoodProvider({ children }) {
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
-  // 1. 내 위치 잡기
+  //좌표를 주소로 변환하는 함수 (Reverse Geocoding)
+  const getAddress = (lat, lng) => {
+    // 카카오 스크립트가 로딩 안 됐으면 중단
+    if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services)
+      return;
+
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    const callback = (result, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        // 행정동 주소 가져오기 (예: 경남 진주시 칠암동)
+        const address = result[0].address.address_name;
+        setLocationStatus(`현재 위치: ${address}`);
+      } else {
+        setLocationStatus("주소를 불러올 수 없어요");
+      }
+    };
+
+    // 🚨 주의: 카카오는 (경도, 위도) 순서입니다! (lng, lat)
+    geocoder.coord2Address(lng, lat, callback);
+  };
+
+  // 1. 내 위치 잡기 (수정됨!)
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setMyLoc({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-          setLocationStatus("내 위치를 찾았어요! ");
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          console.log("GPS 수신 성공:", lat, lng);
+
+          setMyLoc({ lat, lng });
+          // 🆕 "내 위치 찾았어요" 대신 주소 변환 함수 실행!
+          getAddress(lat, lng);
         },
         (err) => {
           console.error("GPS 실패:", err);
-          setLocationStatus("위치 파악 실패 (기본 위치: 진주)");
-          setMyLoc({ lat: 35.1585, lng: 128.1054 });
+          // 실패 시 기본 위치(진주) 설정
+          const defaultLat = 35.1585;
+          const defaultLng = 128.1054;
+
+          setMyLoc({ lat: defaultLat, lng: defaultLng });
+          // 기본 위치의 주소도 가져오기
+          getAddress(defaultLat, defaultLng);
         }
       );
     } else {
-      setLocationStatus("GPS 미지원 브라우저");
-      setMyLoc({ lat: 35.1585, lng: 128.1054 });
+      const defaultLat = 35.1585;
+      const defaultLng = 128.1054;
+      setMyLoc({ lat: defaultLat, lng: defaultLng });
+      getAddress(defaultLat, defaultLng);
     }
   }, []);
 
-  // 2. 카카오 검색 함수 (type 파라미터 추가!)
+  // ... (나머지 searchPlaces, recommendMenu 등 기존 코드 그대로 유지) ...
+
+  const resetAiResult = () => {
+    setAiResult("");
+  };
+
   const searchPlaces = (keyword, type = "home") => {
     if (!myLoc || !window.kakao || !window.kakao.maps) return;
 
@@ -56,24 +91,18 @@ export function FoodProvider({ children }) {
       (data, status) => {
         const result =
           status === window.kakao.maps.services.Status.OK ? data : [];
-
-        // 🚩 type에 따라 다른 변수에 저장
-        if (type === "home") {
-          setHomeRestaurants(result);
-        } else {
-          setRecommendRestaurants(result);
-        }
+        if (type === "home") setHomeRestaurants(result);
+        else setRecommendRestaurants(result);
       },
       options
     );
   };
 
-  // 3. AI 추천 함수
   const recommendMenu = async () => {
     if (!myLoc) return alert("위치 정보를 기다리고 있어요!");
     setIsLoading(true);
     setAiResult("Gemini가 고민 중... 🤔");
-    setRecommendRestaurants([]); // AI 리스트만 비우기
+    setRecommendRestaurants([]);
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -87,7 +116,6 @@ export function FoodProvider({ children }) {
       setAiResult(text.split("@@@")[0]);
       const match = text.match(/@@@(.*?)@@@/);
 
-      // 🚩 검색할 때 'recommend' 타입으로 요청!
       if (match && match[1]) searchPlaces(match[1], "recommend");
       else searchPlaces(text.slice(0, 5), "recommend");
     } catch (e) {
@@ -96,11 +124,6 @@ export function FoodProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // 4. 데이터 초기화 (AI 쪽 텍스트만 지움, 데이터는 유지 가능)
-  const resetAiResult = () => {
-    setAiResult("");
   };
 
   const addDislike = (food) => {

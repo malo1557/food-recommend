@@ -8,8 +8,13 @@ import Pagination from "../components/Pagination";
 
 const Recommend = () => {
   //컨텍스트에서 변수 가져옴
-  const { aiResult, recommendMenu, isLoading, recommendRestaurants } =
-    useFood();
+  const {
+    aiResult,
+    recommendMenu,
+    isLoading,
+    recommendRestaurants,
+    locationStatus,
+  } = useFood();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -30,6 +35,7 @@ const Recommend = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>🤖 AI 메뉴 추천</h1>
+      <p className={styles.statusText}>{locationStatus}</p>
 
       <DislikeInput />
 

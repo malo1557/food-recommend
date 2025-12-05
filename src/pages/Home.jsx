@@ -21,9 +21,9 @@ const Home = () => {
     }
   }, [category, myLoc]);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfLastItem = currentPage * itemsPerPage; 
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = homeRestaurants.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = homeRestaurants.slice(indexOfFirstItem, indexOfLastItem); 
 
   return (
     <div className={styles.container}>
@@ -42,6 +42,7 @@ const Home = () => {
       {/* (위 ul은 빈 태그라 사실 지워도 됨, 아래 컴포넌트가 핵심) */}
 
       <RestaurantList restaurants={currentItems} />
+      {console.log(currentItems)}
 
       <Pagination
         totalItems={homeRestaurants.length}

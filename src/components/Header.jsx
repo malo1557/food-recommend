@@ -10,7 +10,6 @@ const Header = memo(() => {
     <header className={styles.header}>
       {/* 1. 제목과 상태 */}
       <h1 className={styles.title}>🍴 점심 메뉴 추천</h1>
-      <p className={styles.status}>{locationStatus}</p>
 
       {/* 2. 네비게이션 메뉴 (탭) */}
       <nav className={styles.nav}>
