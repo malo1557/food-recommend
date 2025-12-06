@@ -106,7 +106,7 @@ export function FoodProvider({ children }) {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const dislikeString =
         dislikes.length > 0 ? `제외할 음식: ${dislikes.join(", ")}.` : "";
-      const prompt = `점심 메뉴 한 가지만 추천해줘. ${dislikeString}. 답변은 항상 마크다운. 음식에 대한 설명도 꼭 넣어줘 마지막 줄에 검색 키워드만 반드시 "@@@키워드@@@" 형식으로 작성.`;
+      const prompt = `점심 메뉴 한 가지만 추천해줘. ${dislikeString}. 답변은 항상 마크다운. 음식에 대한 설명도 꼭 넣어줘 마지막 줄에 검색 키워드는 반드시 "@@@키워드@@@" 형식으로 작성.`;
 
       const res = await model.generateContent(prompt);
       const text = res.response.text();
