@@ -48,7 +48,6 @@ export function FoodProvider({ children }) {
           console.log("GPS 수신 성공:", lat, lng);
 
           setMyLoc({ lat, lng });
-          // 🆕 "내 위치 찾았어요" 대신 주소 변환 함수 실행!
           getAddress(lat, lng);
         },
         (err) => {

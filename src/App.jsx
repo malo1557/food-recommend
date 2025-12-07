@@ -15,7 +15,6 @@ function App() {
   return (
     <FoodProvider>
       <BrowserRouter>
-        {/* 1. 레이아웃 컨테이너 (스타일로 중앙 정렬 등 잡아주면 좋음) */}
         <div
           style={{
             maxWidth: "600px",
@@ -26,18 +25,13 @@ function App() {
             flexDirection: "column",
           }}
         >
-          {/* 2. 헤더: 무조건 보임 */}
           <Header />
-
-          {/* 3. 메인 콘텐츠: 주소에 따라 바뀜 (flex: 1로 남은 공간 다 차지하게) */}
           <main style={{ flex: 1 }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/recommend" element={<Recommend />} />
             </Routes>
           </main>
-
-          {/* 4. 푸터: 무조건 보임 */}
           <Footer />
         </div>
       </BrowserRouter>

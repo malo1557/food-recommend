@@ -1,42 +1,43 @@
+/* 기본 리셋 (브라우저 기본 여백 제거) */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* 앱 바깥 배경색 (연한 회색) */
+}
+
+/* 🚨 범인 검거: #root 스타일 초기화 */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* 기존의 text-align: center, max-width 제거함! */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 📱 모바일 레이아웃 (우리가 만든 것) */
+.layout {
+  max-width: 600px;
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 0; /* 내부는 컴포넌트별로 패딩 줌 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff; /* 앱 안쪽은 흰색 */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* 앱 같은 그림자 */
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* 📄 메인 콘텐츠 영역 */
+.main {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  /* 페이지마다 패딩이 다를 수 있으니 여기선 기본값 X, 또는 필요한 만큼만 */
+  /* padding: 20px; */
 }

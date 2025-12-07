@@ -8,22 +8,22 @@ import RestaurantList from "../components/RestaurantList";
 const Home = () => {
   const { homeRestaurants, searchPlaces, myLoc, locationStatus } = useFood();
 
-  const [category, setCategory] = useState("한식");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const [category, setCategory] = useState("한식"); //카테고리
+  const [currentPage, setCurrentPage] = useState(1); // 페이지 넘버링
+  const itemsPerPage = 4; // 한 페이지에 보여줄 식당 개수
 
   //카테고리 변경시 페이지 1로 변경
   useEffect(() => {
     if (myLoc) {
-      // 🚩 'home' 타입 지정
+      //  'home' 타입 지정
       searchPlaces(`${category} 맛집`, "home");
       setCurrentPage(1);
     }
-  }, [category, myLoc]);
+  }, [category]);
 
-  const indexOfLastItem = currentPage * itemsPerPage; 
+  const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = homeRestaurants.slice(indexOfFirstItem, indexOfLastItem); 
+  const currentItems = homeRestaurants.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className={styles.container}>
