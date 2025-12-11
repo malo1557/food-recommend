@@ -1,0 +1,69 @@
+/* src/App.module.css */
+
+.container {
+  /* [기존 디자인 유지] */
+  max-width: 500px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  min-height: 90vh; /* 카드 느낌 나게 꽉 안 채움 */
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+
+  /* [App.jsx에서 가져온 레이아웃 속성 추가] */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+/* 메인 콘텐츠 영역 (푸터 밀어내기용) */
+.main {
+  flex: 1;
+  width: 100%;
+}
+
+/* 모바일 화면에서는 꽉 차게 */
+@media (max-width: 600px) {
+  .container {
+    max-width: 100%; /* 모바일 꽉 차게 */
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+}
+
+/* 추천 버튼 스타일 */
+.recommendButton {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(
+    135deg,
+    #fee500 0%,
+    #ffd000 100%
+  ); /* 카카오 느낌 그라데이션 */
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(254, 229, 0, 0.4);
+  margin-bottom: 20px;
+}
+
+.recommendButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 229, 0, 0.6);
+}
+
+.recommendButton:disabled {
+  background: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

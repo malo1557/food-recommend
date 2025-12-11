@@ -9,29 +9,23 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Recommend from "./pages/Recommend";
 
-import "./index.css";
+// 👇 CSS 모듈 불러오기 (이거 필수!)
+import styles from "./App.module.css";
+import "./index.css"; // 전역 스타일(배경색 등)
 
 function App() {
   return (
     <FoodProvider>
       <BrowserRouter>
-        <div
-          style={{
-            maxWidth: "600px",
-            margin: "0 auto",
-            padding: "20px",
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <div className={styles.container}>
           <Header />
-          <main style={{ flex: 1 }}>
+          <main className={styles.main}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/recommend" element={<Recommend />} />
             </Routes>
           </main>
+
           <Footer />
         </div>
       </BrowserRouter>
